@@ -3,7 +3,7 @@ namespace kodeops\LaravelTelegramWrapper;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
-use Bugsnag;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
 use kodeops\LaravelTelegramWrapper\Jobs\NewTelegramUpdate;
 
