@@ -1,7 +1,7 @@
 {
     "name": "kodeops/laravel-telegram-wrapper",
     "type": "library",
-    "description": "LAravel Telegram API wrapper.",
+    "description": "Laravel Telegram API wrapper.",
     "keywords": ["kodeops", "plugin", "laravel", "telegram"],
     "homepage": "https://github.com/kodeops/laravel-telegram-wrapper",
     "license": "MIT",
