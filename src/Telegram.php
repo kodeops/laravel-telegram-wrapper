@@ -65,7 +65,7 @@ class Telegram
             return ['url' => $this->url, 'params' => $this->params];
         }
 
-        $this->process($url, $params);
+        $this->process($this->url, $this->params);
     }
 
     public function process()
