@@ -9,28 +9,54 @@ use kodeops\LaravelTelegramWrapper\Jobs\NewTelegramUpdate;
 
 class Telegram
 {
-    // Get chat id: https://api.telegram.org/bot<YourBOTToken>/getUpdates
+    // Documentation: https://core.telegram.org/bots/api
 
     protected $chat_id;
-    protected $bot_key;
     protected $params;
     protected $markdownImage;
     protected $keyboard;
     protected $url;
+    protected $token;
 
-    public function __construct($chat_id = null, $bot_key = null)
+    public function __construct($token = null)
     {
-        $this->chat_id = $chat_id;
-        $this->bot_key = $bot_key ?? env('TELEGRAM_BOT_KEY');
+        $this->token = $token ?? env('TELEGRAM_BOT_KEY');
+
         $this->keyboard = false;
         $this->markdownImage = false;
         $this->params = [];
     }
 
+    private function baseUrl()
+    {
+        // https://core.telegram.org/bots/api#using-a-local-bot-api-server
+        // If using custom telegram server change this setting
+        return env('TELEGRAM_ENDPOINT') ?? 'https://api.telegram.org';
+    }
+
+    public function chat($chat_id)
+    {
+        $this->chat_id = $chat_id;
+        return $this;
+    }
+
+    public function getUpdates()
+    {
+        $this->url = $this->baseUrl() . "/bot{$this->token}/getUpdates";
+        return $this->process();
+    }
+
+    public function setWebhook($url)
+    {
+        $this->params = ['url' => $url];
+        $this->url = $this->baseUrl() . "/bot{$this->token}/setWebhook?" . http_build_query($this->params);
+        return $this->process();
+    }
+
     public function deleteWebhook()
     {
         $this->params = ['drop_pending_updates' => true];
-        $this->url  = "https://api.telegram.org/bot{$this->bot_key}/deleteWebhook?" . http_build_query($this->params);
+        $this->url = $this->baseUrl() . "/bot{$this->token}/deleteWebhook?" . http_build_query($this->params);
         return $this->process();
     }
 
@@ -56,7 +82,7 @@ class Telegram
             return;
         }
 
-        $this->url  = "https://api.telegram.org/bot{$this->bot_key}/sendMessage?" . http_build_query($this->params);
+        $this->url = $this->baseUrl() . "/bot{$this->token}/sendMessage?" . http_build_query($this->params);
         if ($this->keyboard) {
             $this->url .= '&reply_markup=' . json_encode($this->keyboard, true);
         }
@@ -73,10 +99,10 @@ class Telegram
         return self::request($this->url, $this->params);
     }
 
-    public static function request(string $url, array $params, $throw = false)
+    public static function request(string $url, array $params, $throw = true)
     {
         try {
-            Http::get($url)->throw();
+            $request = Http::get($url)->throw();
         } catch (Exception $e) {
             $debug = ['url' => $url, 'params' => $params];
             activity()
@@ -95,7 +121,7 @@ class Telegram
             return false;
         }
 
-        return true;
+        return $request->body();
     }
 
     public function withKeyboard($keyboard = null)
