@@ -83,7 +83,7 @@ class Telegram
         }
 
         if (env('TELEGRAM_DEBUG')) {
-            Log::channel('telegram')->info($params['text']);
+            Log::channel('telegram')->info($this->params['text']);
             return;
         }
 
