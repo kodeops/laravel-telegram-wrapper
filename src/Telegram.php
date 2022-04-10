@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
 use kodeops\LaravelTelegramWrapper\Jobs\NewTelegramUpdate;
+use kodeops\LaravelTelegramWrapper\Exceptions\LaravelTelegramWrapperException;
 
 class Telegram
 {
@@ -20,7 +21,11 @@ class Telegram
 
     public function __construct($token = null)
     {
-        $this->token = $token ?? env('TELEGRAM_BOT_KEY');
+        $this->token = $token ?? env('TELEGRAM_BOT_TOKEN');
+
+        if (is_null($this->token)) {
+            throw new LaravelTelegramWrapperException("Undefined bot token");
+        }
 
         $this->keyboard = false;
         $this->markdownImage = false;
