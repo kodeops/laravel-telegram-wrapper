@@ -51,6 +51,26 @@ class Telegram
         return $this->process();
     }
 
+    public function getMyCommands()
+    {
+        $this->url = $this->baseUrl() . "/bot{$this->token}/getMyCommands";
+        return $this->process();
+    }
+
+    public function setMyCommands($commands)
+    {
+        $this->params = ['commands' => $commands];
+        $this->url = $this->baseUrl() . "/bot{$this->token}/setMyCommands?" . http_build_query($this->params);
+        return $this->process();
+    }
+
+    public function getChatMemberCount()
+    {
+        $this->params = ['chat_id' => $this->chat_id];
+        $this->url = $this->baseUrl() . "/bot{$this->token}/getChatMemberCount?" . http_build_query($this->params);
+        return $this->process();
+    }
+
     public function setWebhook($url)
     {
         $this->params = ['url' => $url];
@@ -153,6 +173,13 @@ class Telegram
             'text' => $markdown,
             'parse_mode' => 'Markdown',
         ];
+
+        return $this;
+    }
+
+    public function disableWebPagePreview()
+    {
+        $this->params['disable_web_page_preview'] = true;
 
         return $this;
     }
