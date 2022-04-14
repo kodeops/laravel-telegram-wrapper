@@ -59,28 +59,28 @@ class Telegram
 
     public function setMyCommands($commands)
     {
-        $this->params = ['commands' => $commands];
+        $this->params['commands'] = $commands;
         $this->url = $this->baseUrl() . "/bot{$this->token}/setMyCommands?" . http_build_query($this->params);
         return $this->process();
     }
 
     public function getChatMemberCount()
     {
-        $this->params = ['chat_id' => $this->chat_id];
+        $this->params['chat_id'] = $this->chat_id;
         $this->url = $this->baseUrl() . "/bot{$this->token}/getChatMemberCount?" . http_build_query($this->params);
         return $this->process();
     }
 
     public function setWebhook($url)
     {
-        $this->params = ['url' => $url];
+        $this->params['url'] = $url;
         $this->url = $this->baseUrl() . "/bot{$this->token}/setWebhook?" . http_build_query($this->params);
         return $this->process();
     }
 
     public function deleteWebhook()
     {
-        $this->params = ['drop_pending_updates' => true];
+        $this->params['drop_pending_updates'] = true;
         $this->url = $this->baseUrl() . "/bot{$this->token}/deleteWebhook?" . http_build_query($this->params);
         return $this->process();
     }
@@ -167,19 +167,18 @@ class Telegram
 
     public function withMarkdownImage($markdownImage = null)
     {
-        if (! is_null($markdownImage)) {
-            $this->markdownImage = "[​​​​​​​​​​​]({$markdownImage})";
+        if (is_null($markdownImage)) {
+            return $this;
         }
+        $this->markdownImage = "[​​​​​​​​​​​]({$markdownImage})";
 
         return $this;
     }
 
     public function withMarkdown($markdown)
     {
-        $this->params = [
-            'text' => $markdown,
-            'parse_mode' => 'Markdown',
-        ];
+        $this->params['text'] = $markdown;
+        $this->params['parse_mode'] ='Markdown';
 
         return $this;
     }
