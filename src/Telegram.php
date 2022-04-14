@@ -45,6 +45,20 @@ class Telegram
         return $this;
     }
 
+    // https://core.telegram.org/bots/api#getme
+    public function getMe()
+    {
+        $this->url = $this->baseUrl() . "/bot{$this->token}/getMe";
+        return $this->process();
+    }
+
+    // https://core.telegram.org/bots/api#getWebhookInfo
+    public function getWebhookInfo()
+    {
+        $this->url = $this->baseUrl() . "/bot{$this->token}/getWebhookInfo";
+        return $this->process();
+    }
+
     public function getUpdates()
     {
         $this->url = $this->baseUrl() . "/bot{$this->token}/getUpdates";
@@ -85,6 +99,15 @@ class Telegram
         return $this->process();
     }
 
+    public function answerCallbackQuery($callback_query_id, $text, $show_alert)
+    {
+        $this->params['callback_query_id'] = $callback_query_id;
+        $this->params['text'] = $text;
+        $this->params['show_alert'] = $show_alert;
+        $this->url = $this->baseUrl() . "/bot{$this->token}/answerCallbackQuery?" . http_build_query($this->params);
+        return $this->process();
+    }
+
     public function sendMessage($queue = false)
     {
         $this->params['chat_id'] = $this->chat_id;
@@ -117,6 +140,18 @@ class Telegram
         }
 
         $this->process($this->url, $this->params);
+    }
+
+    // https://core.telegram.org/bots/api#editmessagetext
+    public function editMessageText(int $message_id)
+    {
+        $this->params['chat_id'] = $this->chat_id;
+        $this->params['message_id'] = $message_id;
+
+        $this->url = $this->baseUrl() . "/bot{$this->token}/editMessageText?" . http_build_query($this->params);
+        if ($this->keyboard) {
+            $this->url .= '&reply_markup=' . json_encode($this->keyboard, true);
+        }
     }
 
     public function process()
