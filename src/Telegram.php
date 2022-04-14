@@ -152,6 +152,7 @@ class Telegram
         if ($this->keyboard) {
             $this->url .= '&reply_markup=' . json_encode($this->keyboard, true);
         }
+        return $this->process($this->url, $this->params);
     }
 
     public function process()
