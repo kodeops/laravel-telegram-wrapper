@@ -18,12 +18,10 @@ class Telegram
     protected $keyboard;
     protected $url;
     protected $token;
-    protected $debug;
 
     public function __construct($token = null)
     {
         $this->token = $token ?? env('TELEGRAM_BOT_TOKEN');
-        $this->debug = env('TELEGRAM_DEBUG');
 
         if (is_null($this->token)) {
             throw new LaravelTelegramWrapperException("Undefined bot token");
@@ -130,7 +128,7 @@ class Telegram
     {
         $request_data = ['url' => $url, 'params' => $params];
 
-        if (env('TELEGRAM_DEBUG')) {
+        if (env('TELEGRAM_REQUEST_LOG')) {
             activity()
                 ->withProperties($request_data)
                 ->log('telegram.debug');
