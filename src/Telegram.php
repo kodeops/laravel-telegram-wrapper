@@ -184,6 +184,17 @@ class Telegram
         return $this;
     }
 
+    public function replyToMessage(int $message_id = null)
+    {
+        if (is_null($message_id)) {
+            return $this;
+        }
+
+        $this->params['reply_to_message_id'] = $message_id;
+
+        return $this;
+    }
+
     public function queueMessage()
     {
         $this->sendMessage(true);
