@@ -73,7 +73,7 @@ class Telegram
 
     public function setMyCommands($commands)
     {
-        $this->params['commands'] = $commands;
+        $this->params['commands'] = json_encode($commands);
         $this->url = $this->baseUrl() . "/bot{$this->token}/setMyCommands?" . http_build_query($this->params);
         return $this->process();
     }
