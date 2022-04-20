@@ -219,6 +219,14 @@ class Telegram
         return $this;
     }
 
+    public function withHtml($html)
+    {
+        $this->params['text'] = $html;
+        $this->params['parse_mode'] = 'HTML';
+
+        return $this;
+    }
+
     public function disableWebPagePreview()
     {
         $this->params['disable_web_page_preview'] = true;
