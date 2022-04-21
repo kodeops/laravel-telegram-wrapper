@@ -108,6 +108,31 @@ class Telegram
         return $this->process();
     }
 
+    private function sendWithKeyboard($method, $queue)
+    {
+        $this->url = $this->baseUrl();
+        $this->url .= "/bot{$this->token}/{$method}";
+        $this->url .= "?" . http_build_query($this->params);
+
+        if ($this->keyboard) {
+            $this->url .= '&reply_markup=' . json_encode($this->keyboard, true);
+        }
+
+        if ($queue) {
+            return ['url' => $this->url, 'params' => $this->params];
+        }
+
+        $this->process($this->url, $this->params);
+    }
+
+    public function sendPhoto($photo,$queue = false)
+    {
+        $this->params['chat_id'] = $this->chat_id;
+        $this->params['photo'] = $photo;
+
+        $this->sendWithKeyboard('sendPhoto', $queue);
+    }
+
     public function sendMessage($queue = false)
     {
         $this->params['chat_id'] = $this->chat_id;
@@ -130,16 +155,7 @@ class Telegram
             return;
         }
 
-        $this->url = $this->baseUrl() . "/bot{$this->token}/sendMessage?" . http_build_query($this->params);
-        if ($this->keyboard) {
-            $this->url .= '&reply_markup=' . json_encode($this->keyboard, true);
-        }
-
-        if ($queue) {
-            return ['url' => $this->url, 'params' => $this->params];
-        }
-
-        $this->process($this->url, $this->params);
+        $this->sendWithKeyboard('sendMessage', $queue);
     }
 
     // https://core.telegram.org/bots/api#editmessagetext
@@ -219,10 +235,14 @@ class Telegram
         return $this;
     }
 
-    public function withHtml($html)
+    public function withMarkdownCaption($markdown)
     {
-        $this->params['text'] = $html;
-        $this->params['parse_mode'] = 'HTML';
+        // https://core.telegram.org/bots/api#sendphoto
+        if (strlen($markdown) > 1024) {
+            throw new LaravelTelegramWrapperException("caption exceeds allowed characters");
+        }
+        $this->params['caption'] = $markdown;
+        $this->params['parse_mode'] ='Markdown';
 
         return $this;
     }
