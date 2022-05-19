@@ -108,6 +108,17 @@ class Telegram
         return $this->process();
     }
 
+    private function checkChatIdIsPresent()
+    {
+        if (! isset($this->params['chat_id'])) {
+            throw new LaravelTelegramWrapperException("Undefined chat_id");
+        }
+
+        if ($this->params['chat_id'] == '') {
+            throw new LaravelTelegramWrapperException("Undefined chat_id");
+        }
+    }
+
     private function sendWithKeyboard($method, $queue)
     {
         $this->url = $this->baseUrl();
@@ -117,6 +128,8 @@ class Telegram
         if ($this->keyboard) {
             $this->url .= '&reply_markup=' . json_encode($this->keyboard, true);
         }
+
+        $this->checkChatIdIsPresent();
 
         if ($queue) {
             return ['url' => $this->url, 'params' => $this->params];
@@ -136,6 +149,8 @@ class Telegram
     public function sendMessage($queue = false)
     {
         $this->params['chat_id'] = $this->chat_id;
+
+        $this->checkChatIdIsPresent();
 
         if ($this->markdownImage) {
             if (! isset($this->params['parse_mode'])) {
