@@ -24,7 +24,11 @@ class Telegram
         $this->token = $token ?? env('TELEGRAM_BOT_TOKEN');
 
         if (is_null($this->token)) {
-            throw new LaravelTelegramWrapperException("Undefined bot token");
+            throw new LaravelTelegramWrapperException("Missing TELEGRAM_BOT_TOKEN");
+        }
+
+        if (env('TELEGRAM_CHAT_ID')) {
+            $this->chat_id = env('TELEGRAM_CHAT_ID');
         }
 
         $this->keyboard = false;
