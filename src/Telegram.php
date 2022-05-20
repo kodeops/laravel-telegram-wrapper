@@ -142,7 +142,7 @@ class Telegram
         $this->process($this->url, $this->params);
     }
 
-    public function sendPhoto($photo,$queue = false)
+    public function sendPhoto($photo, $queue = false)
     {
         $this->params['chat_id'] = $this->chat_id;
         $this->params['photo'] = $photo;
