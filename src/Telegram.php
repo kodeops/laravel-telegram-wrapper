@@ -89,6 +89,12 @@ class Telegram
         return $this->process();
     }
 
+    public function setParam(string $key, $value)
+    {
+        $this->params[$key] = $value;
+        return $this;
+    }
+
     public function setWebhook($url)
     {
         $this->params['url'] = $url;
