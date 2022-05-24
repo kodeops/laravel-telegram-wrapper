@@ -32,11 +32,11 @@ class Utils
             '.', 
             '!'
         ];
-
+        $replaced = '';
         foreach ($replaces as $replace) {
-            $message = str_replace($replace, "\\\{$replace}", $replace);
+            $replaced = str_replace($replace, "\\\\" . $replace, $message);
         }
 
-        return $replace;
+        return $replaced;
     }
 }
