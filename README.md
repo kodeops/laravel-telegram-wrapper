@@ -27,7 +27,7 @@ Add a new `channel` in `logging.php` config file:
 
 ## Add environment settings
 
-These would be used by default, additionally you can pass the credentials when initialising the class.
+These would be used by default, additionally you can pass the credentials when instantiating the object.
 
 ```
 TELEGRAM_DEBUG=false
