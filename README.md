@@ -31,7 +31,7 @@ These would be used by default, additionally you can pass the credentials when i
 
 ```
 TELEGRAM_DEBUG=false
-TELEGRAM_TOKEN=<token>
+TELEGRAM_BOT_TOKEN=<token>
 TELEGRAM_CHAT_ID=<chat_id>
 ```
 
