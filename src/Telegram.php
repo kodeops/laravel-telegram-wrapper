@@ -219,8 +219,11 @@ class Telegram
                 ->log('telegram.exception');
 
             Bugsnag::registerCallback(function ($report) use ($request_data) {
-                $report->setMetaData($request_data);
+                $report->setMetaData([
+                    'telegram-wrapper' => $request_data,
+                ]);
             });
+
             Bugsnag::notifyException($e);
 
             if ($throw) {
