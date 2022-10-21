@@ -156,6 +156,26 @@ class Telegram
         $this->sendWithKeyboard('sendPhoto', $queue);
     }
 
+    // https://core.telegram.org/bots/api#sendanimation
+    // Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
+    public function sendAnimation($animation, $queue = false)
+    {
+        $this->params['chat_id'] = $this->chat_id;
+        $this->params['animation'] = $animation;
+
+        $this->sendWithKeyboard('sendAnimation', $queue);
+    }
+
+    // https://core.telegram.org/bots/api#sendvideo
+    // Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+    public function sendVideo($video, $queue = false)
+    {
+        $this->params['chat_id'] = $this->chat_id;
+        $this->params['video'] = $video;
+
+        $this->sendWithKeyboard('sendVideo', $queue);
+    }
+
     public function sendMessage($queue = false)
     {
         $this->params['chat_id'] = $this->chat_id;
