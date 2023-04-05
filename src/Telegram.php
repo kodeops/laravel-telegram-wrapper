@@ -133,11 +133,11 @@ class Telegram
     {
         $this->url = $this->baseUrl();
         $this->url .= "/bot{$this->token}/{$method}";
-        $this->url .= "?" . http_build_query($this->params);
-
         if ($this->keyboard) {
-            $this->url .= '&reply_markup=' . json_encode($this->keyboard, true);
+            $this->params['reply_markup'] = json_encode($this->keyboard);
         }
+
+        $this->url .= "?" . http_build_query($this->params);
 
         $this->checkChatIdIsPresent();
 
